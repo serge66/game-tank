@@ -2,9 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="fb6c047e-2718-4362-82e1-3662641d28f6" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/5.2.1/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/5.2.1/fileHashes/fileHashes.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/cache.properties" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/cache.properties" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/kotlin/TestWindow.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/kotlin/TestWindow.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -69,6 +72,26 @@
     <property name="settings.editor.selected.configurable" value="configurable.group.appearance" />
     <property name="show.migrate.to.gradle.popup" value="false" />
   </component>
+  <component name="RunManager">
+    <configuration name="TestWindowKt" type="JetRunConfigurationType" factoryName="Kotlin" temporary="true" nameIsGenerated="true">
+      <module name="game-tank.test" />
+      <option name="VM_PARAMETERS" />
+      <option name="PROGRAM_PARAMETERS" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="MAIN_CLASS_NAME" value="TestWindowKt" />
+      <option name="WORKING_DIRECTORY" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Kotlin.TestWindowKt" />
+      </list>
+    </recent_temporary>
+  </component>
   <component name="SvnConfiguration">
     <configuration />
   </component>
@@ -80,7 +103,8 @@
       <option name="presentableId" value="Default" />
       <updated>1596167628443</updated>
       <workItem from="1596167631490" duration="3431000" />
-      <workItem from="1596418571613" duration="3053000" />
+      <workItem from="1596418571613" duration="3411000" />
+      <workItem from="1596433817226" duration="1429000" />
     </task>
     <servers />
   </component>
@@ -92,5 +116,25 @@
       <screen x="0" y="23" width="1440" height="827" />
     </state>
     <state x="320" y="102" key="#Project_Structure/0.23.1440.827/1440.-212.1920.1057/-1920.23.1920.1057@0.23.1440.827" timestamp="1596426579408" />
+    <state x="496" y="159" key="#com.intellij.ide.util.MemberChooser" timestamp="1596433260100">
+      <screen x="0" y="23" width="1440" height="827" />
+    </state>
+    <state x="496" y="159" key="#com.intellij.ide.util.MemberChooser/0.23.1440.827/1440.-212.1920.1057/-1920.23.1920.1057@0.23.1440.827" timestamp="1596433260100" />
+    <state width="1398" height="195" key="GridCell.Tab.0.bottom" timestamp="1596436475352">
+      <screen x="0" y="23" width="1440" height="827" />
+    </state>
+    <state width="1398" height="195" key="GridCell.Tab.0.bottom/0.23.1440.827/1440.-212.1920.1057/-1920.23.1920.1057@0.23.1440.827" timestamp="1596436475352" />
+    <state width="1398" height="195" key="GridCell.Tab.0.center" timestamp="1596436475350">
+      <screen x="0" y="23" width="1440" height="827" />
+    </state>
+    <state width="1398" height="195" key="GridCell.Tab.0.center/0.23.1440.827/1440.-212.1920.1057/-1920.23.1920.1057@0.23.1440.827" timestamp="1596436475350" />
+    <state width="1398" height="195" key="GridCell.Tab.0.left" timestamp="1596436475349">
+      <screen x="0" y="23" width="1440" height="827" />
+    </state>
+    <state width="1398" height="195" key="GridCell.Tab.0.left/0.23.1440.827/1440.-212.1920.1057/-1920.23.1920.1057@0.23.1440.827" timestamp="1596436475349" />
+    <state width="1398" height="195" key="GridCell.Tab.0.right" timestamp="1596436475351">
+      <screen x="0" y="23" width="1440" height="827" />
+    </state>
+    <state width="1398" height="195" key="GridCell.Tab.0.right/0.23.1440.827/1440.-212.1920.1057/-1920.23.1920.1057@0.23.1440.827" timestamp="1596436475351" />
   </component>
 </project>
