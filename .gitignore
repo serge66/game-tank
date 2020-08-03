@@ -26,3 +26,7 @@ hs_err_pid*
 .gradle/5.2.1/vcsMetadata-1/
 .idea/vcs.xml
 .idea/
+/build
+/.idea
+/.gradle
+
