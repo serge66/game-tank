@@ -5,12 +5,12 @@ package com.github.serge66.model
 * */
 interface View {
     //位置
-    var x: Int
-    var y: Int
+    val x: Int
+    val y: Int
 
     //宽高
-    var height: Int
-    var width: Int
+    val height: Int
+    val width: Int
 
     //绘制
     fun draw()
