@@ -1,5 +1,6 @@
 package com.github.serge66
 
+import com.github.serge66.business.AutoMove
 import com.github.serge66.business.Blockable
 import com.github.serge66.business.Movable
 import com.github.serge66.enums.Direction
@@ -93,10 +94,13 @@ class GameWindow : Window(
                 }
             }
             move.notityCollision(badDirection, badBlock);
-
-
         }
 
+        //让子弹自动移动
+        views.filter { it is AutoMove }.forEach {
+
+            (it as AutoMove).autoMove()
+        }
 
     }
 }
