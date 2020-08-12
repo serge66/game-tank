@@ -1,19 +1,24 @@
 package com.github.serge66.model
 
 import com.github.serge66.Config
+import com.github.serge66.business.Blockable
+import com.github.serge66.business.Movable
 import com.github.serge66.enums.Direction
 import org.itheima.kotlin.game.core.Painter
 import java.awt.Paint
 
 /**
  * 我方坦克
+ * 具备运动能力
  */
-class Tank(override var x: Int, override var y: Int) : View {
+class Tank(override var x: Int, override var y: Int) : Movable {
     override var height: Int = Config.block
     override var width: Int = Config.block
-    private var currentDirection: Direction = Direction.UP
+    override var currentDirection: Direction = Direction.UP
     //坦克速度
-    private var speed: Int = 8
+    override var speed: Int = 8
+    //当前的发生碰撞的方向
+    var badDirection: Direction? = null
 
     override fun draw() {
         /*when (currentDirection) {
@@ -32,6 +37,10 @@ class Tank(override var x: Int, override var y: Int) : View {
     }
 
     fun move(direction: Direction) {
+        //如果当前移动的方向是要发生碰撞的方向 不执行
+        if (this.badDirection == direction) {
+            return
+        }
         if (this.currentDirection != direction) {
             this.currentDirection = direction
             return
@@ -50,4 +59,39 @@ class Tank(override var x: Int, override var y: Int) : View {
         if (y > Config.gameHeight - height) y = Config.gameHeight - height
     }
 
+    override fun willCollision(block: Blockable): Direction? {
+        //提前判断是否碰撞
+        var x = this.x
+        var y = this.y
+
+        when (currentDirection) {
+            Direction.UP -> y -= speed
+            Direction.DOWN -> y += speed
+            Direction.LEFT -> x -= speed
+            Direction.RIGHT -> x += speed
+        }
+
+        //检测碰撞
+        var collision = when {
+            block.y + block.height <= y -> {
+                //如果阻挡物在运动物的上方时，不碰撞
+                false
+            }
+            y + height <= block.y -> {
+                //如果阻挡物在运动物的下方时，不碰撞
+                false
+            }
+            block.x + block.width <= x -> {
+                //如果阻挡物在运动物的左方时，不碰撞
+                false
+            }
+            else -> x + width > block.x
+        }
+        return if (collision) currentDirection else null
+    }
+
+    override fun notityCollision(direction: Direction?, block: Blockable?) {
+        //收到碰撞通知
+        this.badDirection = direction
+    }
 }

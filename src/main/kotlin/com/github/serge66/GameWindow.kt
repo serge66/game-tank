@@ -1,5 +1,7 @@
 package com.github.serge66
 
+import com.github.serge66.business.Blockable
+import com.github.serge66.business.Movable
 import com.github.serge66.enums.Direction
 import com.github.serge66.model.*
 import javafx.scene.input.KeyCode
@@ -17,7 +19,7 @@ class GameWindow : Window(
     private lateinit var tank: Tank;
 
     override fun onCreate() {
-        var file = File(javaClass.getResource("/map/1.map").path)
+        var file = File(javaClass.getResource("/map/2.map").path)
         val readLines = file.readLines()
         var lineNum = 0
         readLines.forEach { line ->
@@ -66,5 +68,31 @@ class GameWindow : Window(
     }
 
     override fun onRefresh() {
+        //业务逻辑 耗时操作这里完成
+        //判断运动的物体和阻塞物体是否发生碰撞
+        //找到运动的物体
+        views.filter { it is Movable }.forEach { move ->
+            move as Movable
+            //碰撞的方向
+            var badDirection: Direction? = null
+            //碰撞的 block
+            var badBlock: Blockable? = null
+            //找到阻塞的物体
+            views.filter { it is Blockable }.forEach BlockableTag@{ block ->
+                //遍历集合，判断是否发生碰撞
+                block as Blockable
+                val direction = move.willCollision(block)
+                direction?.let {
+                    badBlock = block
+                    badDirection = direction
+                    return@BlockableTag;
+                }
+            }
+            move.notityCollision(badDirection, badBlock);
+
+
+        }
+
+
     }
 }
