@@ -5,7 +5,6 @@ import com.github.serge66.business.Blockable
 import com.github.serge66.business.Movable
 import com.github.serge66.enums.Direction
 import org.itheima.kotlin.game.core.Painter
-import java.awt.Paint
 
 /**
  * 我方坦克
@@ -93,5 +92,20 @@ class Tank(override var x: Int, override var y: Int) : Movable {
     override fun notityCollision(direction: Direction?, block: Blockable?) {
         //收到碰撞通知
         this.badDirection = direction
+    }
+
+    //发射子弹的方法
+    fun shot():Bullet{
+        //计算子弹真实的位置
+       return Bullet(currentDirection,{
+           when (currentDirection) {
+               Direction.UP -> "img/shot_up.gif"
+               Direction.LEFT -> "img/shot_left.gif"
+               Direction.RIGHT -> "img/shot_right.gif"
+               Direction.DOWN -> "img/shot_down.gif"
+           }
+
+       Pair(x,y)
+       })
     }
 }

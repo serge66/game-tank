@@ -64,6 +64,10 @@ class GameWindow : Window(
             KeyCode.D -> {
                 tank.move(Direction.RIGHT)
             }
+            KeyCode.ENTER -> {
+                //发射子弹
+                views.add(tank.shot())
+            }
         }
     }
 
