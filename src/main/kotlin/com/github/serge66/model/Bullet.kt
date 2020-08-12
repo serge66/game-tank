@@ -8,7 +8,7 @@ import org.itheima.kotlin.game.core.Painter
 /**
  * 子弹对象
  */
-class Bullet(private var direction: Direction, creat: () -> Pair<Int, Int>) : View {
+class Bullet(private var direction: Direction, creat: (width:Int,height:Int) -> Pair<Int, Int>) : View {
     override val x: Int
     override val y: Int
     override val height: Int
@@ -24,7 +24,7 @@ class Bullet(private var direction: Direction, creat: () -> Pair<Int, Int>) : Vi
         val size = Painter.size(imgPath)
         width = size[0]
         height = size[1]
-        val pair = creat.invoke()
+        val pair = creat.invoke(width,height)
         x = pair.first
         y = pair.second
     }

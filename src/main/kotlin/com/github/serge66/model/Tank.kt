@@ -95,17 +95,32 @@ class Tank(override var x: Int, override var y: Int) : Movable {
     }
 
     //发射子弹的方法
-    fun shot():Bullet{
+    fun shot(): Bullet {
         //计算子弹真实的位置
-       return Bullet(currentDirection,{
-           when (currentDirection) {
-               Direction.UP -> "img/shot_up.gif"
-               Direction.LEFT -> "img/shot_left.gif"
-               Direction.RIGHT -> "img/shot_right.gif"
-               Direction.DOWN -> "img/shot_down.gif"
-           }
 
-       Pair(x,y)
-       })
+        var bulletX: Int
+        var bulletY: Int
+
+        return Bullet(currentDirection, { bulletWidth, bulletHeight ->
+            when (currentDirection) {
+                Direction.UP -> {
+                    bulletX = x + (width - bulletWidth) / 2
+                    bulletY = y - bulletHeight / 2
+                }
+                Direction.LEFT -> {
+                    bulletX = x - bulletWidth / 2
+                    bulletY = y + (height - bulletHeight) / 2
+                }
+                Direction.RIGHT -> {
+                    bulletX = x - bulletWidth / 2 + width
+                    bulletY = y + (height - bulletHeight) / 2
+                }
+                Direction.DOWN -> {
+                    bulletX = x + (width - bulletWidth) / 2
+                    bulletY = y + height + bulletHeight / 2
+                }
+            }
+            Pair(bulletX, bulletY)
+        })
     }
 }
