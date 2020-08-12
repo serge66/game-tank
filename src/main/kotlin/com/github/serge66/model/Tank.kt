@@ -101,7 +101,7 @@ class Tank(override var x: Int, override var y: Int) : Movable {
         var bulletX: Int
         var bulletY: Int
 
-        return Bullet(currentDirection, { bulletWidth, bulletHeight ->
+        return Bullet(currentDirection) { bulletWidth, bulletHeight ->
             when (currentDirection) {
                 Direction.UP -> {
                     bulletX = x + (width - bulletWidth) / 2
@@ -117,10 +117,10 @@ class Tank(override var x: Int, override var y: Int) : Movable {
                 }
                 Direction.DOWN -> {
                     bulletX = x + (width - bulletWidth) / 2
-                    bulletY = y + height + bulletHeight / 2
+                    bulletY = y + height - bulletHeight / 2
                 }
             }
             Pair(bulletX, bulletY)
-        })
+        }
     }
 }

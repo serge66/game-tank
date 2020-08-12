@@ -14,10 +14,10 @@ class Bullet(private var direction: Direction, creat: (width:Int,height:Int) -> 
     override val height: Int
     override val width: Int
     private val imgPath = when (direction) {
-        Direction.UP -> "img/shot_up.gif"
+        Direction.UP -> "img/shot_top.gif"
         Direction.LEFT -> "img/shot_left.gif"
         Direction.RIGHT -> "img/shot_right.gif"
-        Direction.DOWN -> "img/shot_down.gif"
+        Direction.DOWN -> "img/shot_bottom.gif"
     }
     init {
         //获得图标大小
