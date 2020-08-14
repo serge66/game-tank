@@ -6,6 +6,9 @@ import com.github.serge66.model.View
  * 具备攻击的能力
  */
 interface Attackable : View {
+    //具备攻击力
+    val attackPower: Int
+
     //将要攻击
     fun isCollision(sufferable: Sufferable): Boolean
 

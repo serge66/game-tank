@@ -21,6 +21,9 @@ class Bullet(override var currentDirection: Direction, creat: (width: Int, heigh
     override val height: Int
     override val width: Int
     override val speed: Int = 8
+    override val attackPower: Int = 1
+    //子弹是否已经被销毁
+    private var isDestoryed = false
     private val imgPath = when (currentDirection) {
         Direction.UP -> "img/shot_top.gif"
         Direction.LEFT -> "img/shot_left.gif"
@@ -52,8 +55,9 @@ class Bullet(override var currentDirection: Direction, creat: (width: Int, heigh
         }
     }
 
-    override fun destory(): Boolean {
-        //子弹被是否越界屏幕 是否被销毁
+    override fun isDestory(): Boolean {
+        if (isDestoryed) return true
+        //子弹是否越界屏幕 是否被销毁
         if (x < -width) return true
         if (x > Config.gameWidth) return true
         if (y < -height) return true
@@ -67,5 +71,7 @@ class Bullet(override var currentDirection: Direction, creat: (width: Int, heigh
 
     override fun notityAttack(sufferable: Sufferable) {
         println("子弹发生碰撞了。。。。")
+        //子弹攻击墙体后，自动销毁
+        isDestoryed = true
     }
 }

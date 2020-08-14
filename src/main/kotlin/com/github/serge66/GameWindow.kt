@@ -105,7 +105,7 @@ class GameWindow : Window(
         //判断子弹是否需要回收，已经被销毁的子弹需要回收
         views.filter { it is Destoryable }.forEach { destory ->
             destory as Destoryable
-            if (destory.destory()) {
+            if (destory.isDestory()) {
                 views.remove(destory)
             }
         }
