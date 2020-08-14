@@ -4,7 +4,6 @@ import com.github.serge66.Config
 import com.github.serge66.business.Blockable
 import com.github.serge66.business.Movable
 import com.github.serge66.enums.Direction
-import com.github.serge66.ext.checkCollision
 import org.itheima.kotlin.game.core.Painter
 
 /**
@@ -57,23 +56,6 @@ class Tank(override var x: Int, override var y: Int) : Movable {
         if (x > Config.gameWidth - width) x = Config.gameWidth - width
         if (y < 0) y = 0
         if (y > Config.gameHeight - height) y = Config.gameHeight - height
-    }
-
-    override fun willCollision(block: Blockable): Direction? {
-        //提前判断是否碰撞
-        var x = this.x
-        var y = this.y
-
-        when (currentDirection) {
-            Direction.UP -> y -= speed
-            Direction.DOWN -> y += speed
-            Direction.LEFT -> x -= speed
-            Direction.RIGHT -> x += speed
-        }
-
-        //检测碰撞
-        var collision = checkCollision(x, y, width, height, block.x, block.y, block.width, block.height)
-        return if (collision) currentDirection else null
     }
 
     override fun notityCollision(direction: Direction?, block: Blockable?) {

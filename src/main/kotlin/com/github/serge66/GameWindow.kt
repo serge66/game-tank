@@ -34,6 +34,7 @@ class GameWindow : Window(
                     '铁' -> views.add(Steel(columnNum * Config.block, lineNum * Config.block))
                     '草' -> views.add(Grass(columnNum * Config.block, lineNum * Config.block))
                     '水' -> views.add(Water(columnNum * Config.block, lineNum * Config.block))
+                    '敌' -> views.add(Enemy(columnNum * Config.block, lineNum * Config.block))
                 }
                 columnNum++
             }
@@ -50,7 +51,7 @@ class GameWindow : Window(
         views.forEach {
             it.draw()
         }
-        println(views.size)
+//        println(views.size)
     }
 
     override fun onKeyPressed(event: KeyEvent) {
@@ -85,7 +86,8 @@ class GameWindow : Window(
             //碰撞的 block
             var badBlock: Blockable? = null
             //找到阻塞的物体
-            views.filter { it is Blockable }.forEach blockTag@{ block ->
+            //运动的物体不和自己比较
+            views.filter { (it is Blockable) and (it != move) }.forEach blockTag@{ block ->
                 //遍历集合，判断是否发生碰撞
                 block as Blockable
                 val direction = move.willCollision(block)
