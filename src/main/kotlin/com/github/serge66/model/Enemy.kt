@@ -2,6 +2,7 @@ package com.github.serge66.model
 
 import com.github.serge66.Config
 import com.github.serge66.business.AutoMove
+import com.github.serge66.business.AutoShot
 import com.github.serge66.business.Blockable
 import com.github.serge66.business.Movable
 import com.github.serge66.enums.Direction
@@ -14,7 +15,7 @@ import kotlin.random.Random
  * 具备自动移动能力
  * 具备阻塞能力
  */
-class Enemy(override var x: Int, override var y: Int) : Movable, AutoMove ,Blockable{
+class Enemy(override var x: Int, override var y: Int) : Movable, AutoMove, Blockable, AutoShot {
     override val height: kotlin.Int = Config.block
     override val width: Int = Config.block
     override var currentDirection: Direction = Direction.DOWN
@@ -86,7 +87,7 @@ class Enemy(override var x: Int, override var y: Int) : Movable, AutoMove ,Block
     //随机转换方向
     private fun rdmDirection(direction: Direction): Direction {
         var index = (0 until 5).random()
-        println("随机数：${index}")
+//        println("随机数：${index}")
         var d = when (index) {
             1 -> Direction.UP
             2 -> Direction.DOWN
@@ -98,5 +99,34 @@ class Enemy(override var x: Int, override var y: Int) : Movable, AutoMove ,Block
             rdmDirection(d)
         }
         return d
+    }
+
+    override fun shot(): View? {
+        //计算子弹真实的位置
+
+        var bulletX: Int
+        var bulletY: Int
+
+        return Bullet(currentDirection) { bulletWidth, bulletHeight ->
+            when (currentDirection) {
+                Direction.UP -> {
+                    bulletX = x + (width - bulletWidth) / 2
+                    bulletY = y - bulletHeight / 2
+                }
+                Direction.LEFT -> {
+                    bulletX = x - bulletWidth / 2
+                    bulletY = y + (height - bulletHeight) / 2
+                }
+                Direction.RIGHT -> {
+                    bulletX = x - bulletWidth / 2 + width
+                    bulletY = y + (height - bulletHeight) / 2
+                }
+                Direction.DOWN -> {
+                    bulletX = x + (width - bulletWidth) / 2
+                    bulletY = y + height - bulletHeight / 2
+                }
+            }
+            Pair(bulletX, bulletY)
+        }
     }
 }

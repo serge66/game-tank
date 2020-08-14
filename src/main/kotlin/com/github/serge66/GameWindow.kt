@@ -131,5 +131,8 @@ class GameWindow : Window(
                 }
             }
         }
+        views.filter { it is AutoShot }.forEach {
+            views.add((it as AutoShot).shot())
+        }
     }
 }
