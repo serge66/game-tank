@@ -23,6 +23,14 @@ class Enemy(override var x: Int, override var y: Int) : Movable, AutoMove, Block
 
     //当前的发生碰撞的方向
     private var badDirection: Direction? = null
+    //子弹上次射击时间
+    private var lastShotTime = 0L
+    //子弹射击频率
+    private var shotFrequency = 800
+    //坦克上次移动时间
+    private var lastMoveTime = 0L
+    //坦克移动频率
+    private var moveFrequency = 100
 
     override fun draw() {
         val imgPath = when (currentDirection) {
@@ -63,6 +71,9 @@ class Enemy(override var x: Int, override var y: Int) : Movable, AutoMove, Block
     }
 
     override fun autoMove() {
+        val currentTimeMillis = System.currentTimeMillis()
+        if (currentTimeMillis - lastMoveTime < moveFrequency) return
+        lastMoveTime = currentTimeMillis
 
         //判断当前方向和阻挡方向是否一致，一致则换方向
         if (currentDirection == badDirection) {
@@ -102,8 +113,11 @@ class Enemy(override var x: Int, override var y: Int) : Movable, AutoMove, Block
     }
 
     override fun shot(): View? {
-        //计算子弹真实的位置
+        val currentTimeMillis = System.currentTimeMillis()
+        if (currentTimeMillis - lastShotTime < shotFrequency) return null
+        lastShotTime = currentTimeMillis
 
+        //计算子弹真实的位置
         var bulletX: Int
         var bulletY: Int
 

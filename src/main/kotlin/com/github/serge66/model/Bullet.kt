@@ -70,7 +70,7 @@ class Bullet(override var currentDirection: Direction, creat: (width: Int, heigh
     }
 
     override fun notityAttack(sufferable: Sufferable) {
-        println("子弹发生碰撞了。。。。")
+//        println("子弹发生碰撞了。。。。")
         //子弹攻击墙体后，自动销毁
         isDestoryed = true
     }

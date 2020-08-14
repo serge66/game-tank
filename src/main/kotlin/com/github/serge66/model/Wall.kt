@@ -29,7 +29,7 @@ class Wall(override var x: Int, override var y: Int) : Blockable, Sufferable, De
     }
 
     override fun notitySuffer(attackable: Attackable): Array<View> {
-        println("砖墙被挨打了。。。。。。")
+//        println("砖墙被挨打了。。。。。。")
         //砖墙被攻击后，血量生命值会逐渐减少
         blood -= attackable.attackPower
         //被攻击后，喊疼

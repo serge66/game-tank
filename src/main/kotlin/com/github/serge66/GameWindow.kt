@@ -132,7 +132,10 @@ class GameWindow : Window(
             }
         }
         views.filter { it is AutoShot }.forEach {
-            views.add((it as AutoShot).shot())
+            val shot = (it as AutoShot).shot();
+            shot?.let {
+                views.add(shot)
+            }
         }
     }
 }
