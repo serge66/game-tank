@@ -5,6 +5,7 @@ import com.github.serge66.business.Attackable
 import com.github.serge66.business.Blockable
 import com.github.serge66.business.Destoryable
 import com.github.serge66.business.Sufferable
+import org.itheima.kotlin.game.core.Composer
 import org.itheima.kotlin.game.core.Painter
 
 /**
@@ -27,11 +28,16 @@ class Wall(override var x: Int, override var y: Int) : Blockable, Sufferable, De
         Painter.drawImage("img/wall.gif", x, y)
     }
 
-    override fun notitySuffer(attackable: Attackable) {
+    override fun notitySuffer(attackable: Attackable): Array<View> {
         println("砖墙被挨打了。。。。。。")
         //砖墙被攻击后，血量生命值会逐渐减少
         blood -= attackable.attackPower
+        //被攻击后，喊疼
+        Composer.play("snd/hit.wav")
+        //展现爆炸效果
+        return arrayOf(Blast(x, y))
     }
+
     //血量小于等于0时，被销毁
     override fun isDestory() = blood <= 0
 

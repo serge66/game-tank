@@ -10,5 +10,5 @@ interface Sufferable : View {
     val blood: Int
 
     //通知被攻击
-    fun notitySuffer(attackable: Attackable)
+    fun notitySuffer(attackable: Attackable):Array<View>?
 }

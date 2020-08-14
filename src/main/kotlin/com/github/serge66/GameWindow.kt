@@ -121,7 +121,10 @@ class GameWindow : Window(
                 if (collision) {
                     //如果发生碰撞，则通知两者
                     attack.notityAttack(suffer)
-                    suffer.notitySuffer(attack)
+                    val blastList = suffer.notitySuffer(attack)
+                    blastList?.let {
+                        views.addAll(blastList)
+                    }
                     return@sufferTag
                 }
             }
