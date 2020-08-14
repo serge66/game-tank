@@ -4,6 +4,7 @@ import com.github.serge66.Config
 import com.github.serge66.business.Blockable
 import com.github.serge66.business.Movable
 import com.github.serge66.enums.Direction
+import com.github.serge66.ext.checkCollision
 import org.itheima.kotlin.game.core.Painter
 
 /**
@@ -71,21 +72,7 @@ class Tank(override var x: Int, override var y: Int) : Movable {
         }
 
         //检测碰撞
-        var collision = when {
-            block.y + block.height <= y -> {
-                //如果阻挡物在运动物的上方时，不碰撞
-                false
-            }
-            y + height <= block.y -> {
-                //如果阻挡物在运动物的下方时，不碰撞
-                false
-            }
-            block.x + block.width <= x -> {
-                //如果阻挡物在运动物的左方时，不碰撞
-                false
-            }
-            else -> x + width > block.x
-        }
+        var collision = checkCollision(x, y, width, height, block.x, block.y, block.width, block.height)
         return if (collision) currentDirection else null
     }
 

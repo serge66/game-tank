@@ -1,22 +1,23 @@
 package com.github.serge66
 
-import com.github.serge66.business.AutoMove
-import com.github.serge66.business.Blockable
-import com.github.serge66.business.Movable
+import com.github.serge66.business.*
 import com.github.serge66.enums.Direction
 import com.github.serge66.model.*
 import javafx.scene.input.KeyCode
 import javafx.scene.input.KeyEvent
 import org.itheima.kotlin.game.core.Window
 import java.io.File
+import java.util.concurrent.CopyOnWriteArrayList
 
 class GameWindow : Window(
     title = Config.gameName, icon = Config.gameIcon,
     height = Config.gameHeight, width = Config.gameWidth
 ) {
 
-    //视图的集合
-    private val views = arrayListOf<View>()
+    //管理视图的集合
+//    private val views = arrayListOf<View>()
+    //线程安全的视图集合
+    private val views = CopyOnWriteArrayList<View>()
     private lateinit var tank: Tank;
 
     override fun onCreate() {
@@ -49,6 +50,7 @@ class GameWindow : Window(
         views.forEach {
             it.draw()
         }
+        println(views.size)
     }
 
     override fun onKeyPressed(event: KeyEvent) {
@@ -83,14 +85,14 @@ class GameWindow : Window(
             //碰撞的 block
             var badBlock: Blockable? = null
             //找到阻塞的物体
-            views.filter { it is Blockable }.forEach BlockableTag@{ block ->
+            views.filter { it is Blockable }.forEach blockTag@{ block ->
                 //遍历集合，判断是否发生碰撞
                 block as Blockable
                 val direction = move.willCollision(block)
                 direction?.let {
                     badBlock = block
                     badDirection = direction
-                    return@BlockableTag;
+                    return@blockTag;
                 }
             }
             move.notityCollision(badDirection, badBlock);
@@ -98,9 +100,31 @@ class GameWindow : Window(
 
         //让子弹自动移动
         views.filter { it is AutoMove }.forEach {
-
             (it as AutoMove).autoMove()
         }
-
+        //判断子弹是否需要回收，已经被销毁的子弹需要回收
+        views.filter { it is Destoryable }.forEach { destory ->
+            destory as Destoryable
+            if (destory.destory()) {
+                views.remove(destory)
+            }
+        }
+        //判断具备攻击能力和被攻击能力的物体间是否发生碰撞
+        //找到具备攻击能力的物体
+        views.filter { it is Attackable }.forEach { attack ->
+            attack as Attackable
+            //找到具备被攻击能力的物体
+            views.filter { it is Sufferable }.forEach sufferTag@{ suffer ->
+                //判断是否进行碰撞
+                suffer as Sufferable
+                val collision = attack.isCollision(suffer)
+                if (collision) {
+                    //如果发生碰撞，则通知两者
+                    attack.notityAttack(suffer)
+                    suffer.notitySuffer(attack)
+                    return@sufferTag
+                }
+            }
+        }
     }
 }
