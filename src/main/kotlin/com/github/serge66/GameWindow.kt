@@ -21,6 +21,14 @@ class GameWindow : Window(
     private lateinit var tank: Tank;
     //游戏是否结束
     private var gameOver: Boolean = false
+    //游戏中总共有多少敌方
+    private var enemyTotalSize = 3
+    //游戏中最多同时出现的敌方数量
+    private var enemyActiveSize = 1
+    //敌方出生点坐标
+    private var enemyBornLocation = arrayListOf<Pair<Int, Int>>()
+    //敌方出生点下标
+    private var enemyIndex = 0
 
     override fun onCreate() {
         var file = File(javaClass.getResource("/map/2.map").path)
@@ -36,7 +44,7 @@ class GameWindow : Window(
                     '铁' -> views.add(Steel(columnNum * Config.block, lineNum * Config.block))
                     '草' -> views.add(Grass(columnNum * Config.block, lineNum * Config.block))
                     '水' -> views.add(Water(columnNum * Config.block, lineNum * Config.block))
-                    '敌' -> views.add(Enemy(columnNum * Config.block, lineNum * Config.block))
+                    '敌' -> enemyBornLocation.add(Pair(columnNum * Config.block, lineNum * Config.block))
                 }
                 columnNum++
             }
@@ -92,6 +100,10 @@ class GameWindow : Window(
                 val showDestory = destory.showDestory();
                 showDestory?.let {
                     views.addAll(showDestory)
+                }
+
+                if (destory is Enemy) {
+                    enemyTotalSize--
                 }
             }
         }
@@ -156,8 +168,15 @@ class GameWindow : Window(
             }
         }
         //检测游戏是否结束
-        if (views.filter { it is Camp }.isEmpty()) {
+        if ((views.filter { it is Camp }.isEmpty()) or (enemyTotalSize <= 0)) {
             gameOver = true
+        }
+        //生成敌方坦克
+        if ((enemyTotalSize > 0) and (views.filter { it is Enemy }.size <= 0)) {
+            var index = enemyIndex % enemyBornLocation.size
+            val pair = enemyBornLocation[index];
+            views.add(Enemy(pair.first, pair.second))
+            enemyIndex++
         }
     }
 }
