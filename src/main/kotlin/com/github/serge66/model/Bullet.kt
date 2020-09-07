@@ -13,8 +13,13 @@ import org.itheima.kotlin.game.core.Painter
 /**
  * 子弹对象
  */
-class Bullet(override var currentDirection: Direction, creat: (width: Int, height: Int) -> Pair<Int, Int>) : AutoMove,
-    Destoryable, Attackable {
+class Bullet(
+    override val owner: View,
+    override var currentDirection: Direction,
+    creat: (width: Int, height: Int) -> Pair<Int, Int>
+) : AutoMove,
+    Destoryable, Attackable, Sufferable {
+    override val blood: Int = 1
 
     override var x: Int = 0
     override var y: Int = 0
@@ -74,4 +79,9 @@ class Bullet(override var currentDirection: Direction, creat: (width: Int, heigh
         //子弹攻击墙体后，自动销毁
         isDestoryed = true
     }
+    //子弹相互攻击
+    override fun notitySuffer(attackable: Attackable): Array<View>? {
+        return arrayOf(Blast(x, y))
+    }
+
 }

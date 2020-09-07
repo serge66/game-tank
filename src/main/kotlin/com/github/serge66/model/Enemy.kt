@@ -1,10 +1,7 @@
 package com.github.serge66.model
 
 import com.github.serge66.Config
-import com.github.serge66.business.AutoMove
-import com.github.serge66.business.AutoShot
-import com.github.serge66.business.Blockable
-import com.github.serge66.business.Movable
+import com.github.serge66.business.*
 import com.github.serge66.enums.Direction
 import org.itheima.kotlin.game.core.Painter
 import kotlin.random.Random
@@ -14,8 +11,12 @@ import kotlin.random.Random
  * 具备移动能力
  * 具备自动移动能力
  * 具备阻塞能力
+ * 自动射击
+ * 被击打
  */
-class Enemy(override var x: Int, override var y: Int) : Movable, AutoMove, Blockable, AutoShot {
+class Enemy(override var x: Int, override var y: Int) : Movable, AutoMove, Blockable, AutoShot, Sufferable,
+    Destoryable {
+
     override val height: kotlin.Int = Config.block
     override val width: Int = Config.block
     override var currentDirection: Direction = Direction.DOWN
@@ -31,6 +32,8 @@ class Enemy(override var x: Int, override var y: Int) : Movable, AutoMove, Block
     private var lastMoveTime = 0L
     //坦克移动频率
     private var moveFrequency = 100
+    //敌方坦克血量
+    override var blood: Int = 10
 
     override fun draw() {
         val imgPath = when (currentDirection) {
@@ -121,7 +124,7 @@ class Enemy(override var x: Int, override var y: Int) : Movable, AutoMove, Block
         var bulletX: Int
         var bulletY: Int
 
-        return Bullet(currentDirection) { bulletWidth, bulletHeight ->
+        return Bullet(this, currentDirection) { bulletWidth, bulletHeight ->
             when (currentDirection) {
                 Direction.UP -> {
                     bulletX = x + (width - bulletWidth) / 2
@@ -142,5 +145,18 @@ class Enemy(override var x: Int, override var y: Int) : Movable, AutoMove, Block
             }
             Pair(bulletX, bulletY)
         }
+    }
+
+    override fun notitySuffer(attackable: Attackable): Array<View>? {
+        //如果攻击方是其他敌方，则不掉血
+        if (attackable.owner is Enemy) {
+            return null
+        }
+        blood -= attackable.attackPower
+        return arrayOf(Blast(x, y))
+    }
+
+    override fun isDestory(): Boolean {
+        return blood <= 0;
     }
 }

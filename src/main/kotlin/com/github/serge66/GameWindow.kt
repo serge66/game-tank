@@ -19,6 +19,8 @@ class GameWindow : Window(
     //线程安全的视图集合
     private val views = CopyOnWriteArrayList<View>()
     private lateinit var tank: Tank;
+    //游戏是否结束
+    private var gameOver: Boolean = false
 
     override fun onCreate() {
         var file = File(javaClass.getResource("/map/2.map").path)
@@ -43,7 +45,9 @@ class GameWindow : Window(
         //绘制坦克
         tank = Tank(Config.block * 10, Config.block * 12)
         views.add(tank)
-
+        //绘制大本营
+        var camp = Camp(Config.block * 6 - 32, Config.block * 12 - 32)
+        views.add(camp)
 
     }
 
@@ -55,28 +59,46 @@ class GameWindow : Window(
     }
 
     override fun onKeyPressed(event: KeyEvent) {
-        when (event.code) {
-            KeyCode.W -> {
-                tank.move(Direction.UP)
-            }
-            KeyCode.A -> {
-                tank.move(Direction.LEFT)
-            }
-            KeyCode.S -> {
-                tank.move(Direction.DOWN)
-            }
-            KeyCode.D -> {
-                tank.move(Direction.RIGHT)
-            }
-            KeyCode.ENTER -> {
-                //发射子弹
-                views.add(tank.shot())
+        if (!gameOver) {
+            when (event.code) {
+                KeyCode.W -> {
+                    tank.move(Direction.UP)
+                }
+                KeyCode.A -> {
+                    tank.move(Direction.LEFT)
+                }
+                KeyCode.S -> {
+                    tank.move(Direction.DOWN)
+                }
+                KeyCode.D -> {
+                    tank.move(Direction.RIGHT)
+                }
+                KeyCode.ENTER -> {
+                    //发射子弹
+                    views.add(tank.shot())
+                }
             }
         }
     }
 
     override fun onRefresh() {
         //业务逻辑 耗时操作这里完成
+        //判断子弹是否需要回收，已经被销毁的子弹需要回收
+        views.filter { it is Destoryable }.forEach { destory ->
+            destory as Destoryable
+            if (destory.isDestory()) {
+                views.remove(destory)
+
+                val showDestory = destory.showDestory();
+                showDestory?.let {
+                    views.addAll(showDestory)
+                }
+            }
+        }
+
+        if (gameOver) {
+            return
+        }
         //判断运动的物体和阻塞物体是否发生碰撞
         //找到运动的物体
         views.filter { it is Movable }.forEach { move ->
@@ -104,38 +126,38 @@ class GameWindow : Window(
         views.filter { it is AutoMove }.forEach {
             (it as AutoMove).autoMove()
         }
-        //判断子弹是否需要回收，已经被销毁的子弹需要回收
-        views.filter { it is Destoryable }.forEach { destory ->
-            destory as Destoryable
-            if (destory.isDestory()) {
-                views.remove(destory)
-            }
-        }
+
         //判断具备攻击能力和被攻击能力的物体间是否发生碰撞
         //找到具备攻击能力的物体
         views.filter { it is Attackable }.forEach { attack ->
             attack as Attackable
-            //找到具备被攻击能力的物体
-            views.filter { it is Sufferable }.forEach sufferTag@{ suffer ->
-                //判断是否进行碰撞
-                suffer as Sufferable
-                val collision = attack.isCollision(suffer)
-                if (collision) {
-                    //如果发生碰撞，则通知两者
-                    attack.notityAttack(suffer)
-                    val blastList = suffer.notitySuffer(attack)
-                    blastList?.let {
-                        views.addAll(blastList)
+            //找到具备被攻击能力的物体(攻击方的源不可以是发射方)
+            //攻击方如果也是受攻击方时 是不可以打自己的
+            views.filter { (it is Sufferable) and (attack.owner != it) and (attack != it) }
+                .forEach sufferTag@{ suffer ->
+                    //判断是否进行碰撞
+                    suffer as Sufferable
+                    val collision = attack.isCollision(suffer)
+                    if (collision) {
+                        //如果发生碰撞，则通知两者
+                        attack.notityAttack(suffer)
+                        val blastList = suffer.notitySuffer(attack)
+                        blastList?.let {
+                            views.addAll(blastList)
+                        }
+                        return@sufferTag
                     }
-                    return@sufferTag
                 }
-            }
         }
         views.filter { it is AutoShot }.forEach {
             val shot = (it as AutoShot).shot();
             shot?.let {
                 views.add(shot)
             }
+        }
+        //检测游戏是否结束
+        if (views.filter { it is Camp }.isEmpty()) {
+            gameOver = true
         }
     }
 }

@@ -7,4 +7,8 @@ import com.github.serge66.model.View
  */
 interface Destoryable : View {
     fun isDestory(): Boolean
+    //死给你看
+    fun showDestory(): Array<View>? {
+        return null
+    }
 }

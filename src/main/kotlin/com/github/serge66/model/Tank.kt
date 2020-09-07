@@ -1,21 +1,28 @@
 package com.github.serge66.model
 
 import com.github.serge66.Config
+import com.github.serge66.business.Attackable
 import com.github.serge66.business.Blockable
 import com.github.serge66.business.Movable
+import com.github.serge66.business.Sufferable
 import com.github.serge66.enums.Direction
 import org.itheima.kotlin.game.core.Painter
 
 /**
  * 我方坦克
  * 具备运动能力
+ * 具备阻挡能力
+ * 具备挨打能力
  */
-class Tank(override var x: Int, override var y: Int) : Movable {
+class Tank(override var x: Int, override var y: Int) : Movable, Sufferable, Blockable {
+
     override var height: Int = Config.block
     override var width: Int = Config.block
     override var currentDirection: Direction = Direction.UP
     //坦克速度
     override var speed: Int = 8
+    //我方坦克的血量
+    override var blood: Int = 24
     //当前的发生碰撞的方向
     var badDirection: Direction? = null
 
@@ -70,7 +77,7 @@ class Tank(override var x: Int, override var y: Int) : Movable {
         var bulletX: Int
         var bulletY: Int
 
-        return Bullet(currentDirection) { bulletWidth, bulletHeight ->
+        return Bullet(this, currentDirection) { bulletWidth, bulletHeight ->
             when (currentDirection) {
                 Direction.UP -> {
                     bulletX = x + (width - bulletWidth) / 2
@@ -91,5 +98,11 @@ class Tank(override var x: Int, override var y: Int) : Movable {
             }
             Pair(bulletX, bulletY)
         }
+    }
+
+    //通知我方坦克挨打了
+    override fun notitySuffer(attackable: Attackable): Array<View>? {
+        blood -= attackable.attackPower
+        return arrayOf(Blast(x, y))
     }
 }
