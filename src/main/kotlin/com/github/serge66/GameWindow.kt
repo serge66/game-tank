@@ -6,7 +6,9 @@ import com.github.serge66.model.*
 import javafx.scene.input.KeyCode
 import javafx.scene.input.KeyEvent
 import org.itheima.kotlin.game.core.Window
+import java.io.BufferedReader
 import java.io.File
+import java.io.InputStreamReader
 import java.util.concurrent.CopyOnWriteArrayList
 
 class GameWindow : Window(
@@ -19,20 +21,27 @@ class GameWindow : Window(
     //线程安全的视图集合
     private val views = CopyOnWriteArrayList<View>()
     private lateinit var tank: Tank;
+
     //游戏是否结束
     private var gameOver: Boolean = false
+
     //游戏中总共有多少敌方
-    private var enemyTotalSize = 3
+    private var enemyTotalSize = 20
+
     //游戏中最多同时出现的敌方数量
-    private var enemyActiveSize = 1
+    private var enemyActiveSize = 6
+
     //敌方出生点坐标
     private var enemyBornLocation = arrayListOf<Pair<Int, Int>>()
+
     //敌方出生点下标
     private var enemyIndex = 0
 
     override fun onCreate() {
-        var file = File(javaClass.getResource("/map/2.map").path)
-        val readLines = file.readLines()
+//        var file = File(javaClass.getResource("/map/2.map").path)
+        val resource = javaClass.getResourceAsStream("/map/2.map")
+        val bufferedReader = BufferedReader(InputStreamReader(resource, "utf-8"))
+        val readLines = bufferedReader.readLines()
         var lineNum = 0
         readLines.forEach { line ->
             var columnNum = 0
@@ -172,10 +181,25 @@ class GameWindow : Window(
             gameOver = true
         }
         //生成敌方坦克
-        if ((enemyTotalSize > 0) and (views.filter { it is Enemy }.size <= 0)) {
+        if ((enemyTotalSize >= enemyActiveSize) and (views.filter { it is Enemy }.size < enemyActiveSize)) {
             var index = enemyIndex % enemyBornLocation.size
             val pair = enemyBornLocation[index];
-            views.add(Enemy(pair.first, pair.second))
+            //即将生成的坦克是否要发生坦克碰撞
+            var c =false
+            views.filter { (it is Enemy) or (it is Tank) }.forEach {
+                //检测碰撞
+                var collision = it.checkCollision(it.x, it.y, it.width, it.height, pair.first, pair.second, Config.block, Config.block)
+                if(collision){
+                    c =collision
+                    return
+                }
+                /*if ((Math.abs(it.x - pair.first) < 150) or (Math.abs(it.y - pair.second) < 150)) {
+                }*/
+            }
+            //即将碰撞
+            if(!c){
+                views.add(Enemy(pair.first, pair.second))
+            }
             enemyIndex++
         }
     }

@@ -33,7 +33,7 @@ class Enemy(override var x: Int, override var y: Int) : Movable, AutoMove, Block
     //坦克移动频率
     private var moveFrequency = 100
     //敌方坦克血量
-    override var blood: Int = 10
+    override var blood: Int = 6
 
     override fun draw() {
         val imgPath = when (currentDirection) {
